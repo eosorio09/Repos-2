@@ -1,0 +1,40 @@
+---
+- name: Registrar VM
+  hosts: 192.168.1.116
+  remote_user: root
+
+ #Asignar variables
+  vars:
+  - rhn_user: gvalentin@ipcom.com.mx
+  - rhn_password: tavo0610
+  - rhn_vm_hosts: 192.168.1.116
+  - hostname: web.ipcom.com.mx
+
+  #Inician las tareas
+  tasks:
+  - name: Registrar VM a rhn
+    redhat_subscription:
+     username: "{{ rhn_user }}"
+     password: "{{ rhn_password }}"
+     consumer_name: "{{ hostname }}"
+     force_register: yes
+     state: present
+     autosubscribe: yes
+
+  #Habilitar repositorioa
+  - name: Habilitar repositorios
+    command: "subscription-manager attach --auto"
+
+  #Instalar BD
+  - name: Instalar HTTPD
+    yum:
+     name: 'httpd'
+     state: present
+
+  #Iniciar y habilitar servicio
+  - name: Iniciar servicio HTTP
+    service:
+     name: httpd
+     state: started
+     enabled: yes
+...
