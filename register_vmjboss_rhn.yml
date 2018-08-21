@@ -1,0 +1,34 @@
+---
+- name: Registrar VM
+  hosts: 192.168.1.117
+  remote_user: root
+
+ #Asignar variables
+  vars:
+  - rhn_user: gvalentin@ipcom.com.mx
+  - rhn_password: tavo0610
+  - rhn_vm_hosts: 192.168.1.117
+  - hostname: jboss.ipcom.com.mx
+
+  #Inician las tareas
+  tasks:
+  - name: Registrar VM a rhn
+    redhat_subscription:
+     username: "{{ rhn_user }}"
+     password: "{{ rhn_password }}"
+     consumer_name: "{{ hostname }}"
+     force_register: yes
+     state: present
+     autosubscribe: yes
+
+  #Habilitar repositorioa
+  - name: Habilitar repositorios
+    command: "subscription-manager attach --pool=8a85f98c631d0655016349c9c1a50842"
+
+  - name: Habilitar repositorios
+    command: "subscription-manager repos --enable=jb-eap-7.0-for-rhel-7-server-rpms"
+    command: "subscription-manager repos --enable=jb-eap-7-for-rhel-7-server-rpms"
+
+  - name: Instalar JBOSS
+    command: "yum groupinstall -y jboss-eap7"
+...
