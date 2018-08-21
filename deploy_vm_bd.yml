@@ -2,19 +2,19 @@
 - name: Deployar VM desde PlayBook
   hosts: 192.168.1.113
 
-  #Asignar variables  
+  #Asignar variables
   vars:
   - username: admin@internal
   - password: ipcom123
   - url: https://ovirt-engine.ipcom.com.mx/ovirt-engine/api
   - cluster: Default
-  - template: RHEL-7
-  - vm: vm-PlayBook
-  
+  - template: BD-RHEL-7
+  - vm: vm-BD-PlayBook
+
   #Inician las tareas
   tasks:
   - name: Asignar Variables
-    block: 
+    block:
 
     #Primero se debe autentiacr con el servidor
     - name: Autenticar accesos a RHEV Manager
@@ -32,4 +32,6 @@
        name: "{{ vm }}-{{ ansible_date_time.epoch }}"
        template: "{{ template }}"
        cluster: "{{ cluster }}"
-
+       state: running
+- name: LLamar a register
+  include: register_vmbd_rhn.yml
