@@ -34,4 +34,4 @@
        cluster: "{{ cluster }}"
        state: running
 - name: LLamar a register
-  include: register_vm_rhn.yml
+  include: register_vmweb_rhn.yml
